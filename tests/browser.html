@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@devindex/utils - Browser Tests</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 20px;
+      line-height: 1.6;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    h1 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    h2 {
+      background: #eee;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border-left: 4px solid #666;
+      margin-top: 30px;
+    }
+
+    .test {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+      margin: 5px 0;
+      background: white;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .test.pass {
+      border-left: 4px solid #4CAF50;
+    }
+
+    .test.fail {
+      border-left: 4px solid #F44336;
+      background: #ffebee;
+    }
+
+    .name {
+      font-weight: bold;
+      font-family: monospace;
+    }
+
+    .result {
+      font-weight: bold;
+    }
+
+    .pass .result {
+      color: #4CAF50;
+    }
+
+    .fail .result {
+      color: #F44336;
+    }
+
+    .error {
+      font-size: 0.9em;
+      color: #F44336;
+      margin-top: 4px;
+      font-family: monospace;
+    }
+
+    summary {
+      cursor: pointer;
+      color: #0066cc;
+      outline: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>@devindex/utils - Browser Tests</h1>
+  <p>Tests for cross-platform modules (array, boolean, crypto, http, number, object, string).</p>
+
+  <div id="results"></div>
+
+  <script type="module">
+    import * as array from '../array.js';
+    import * as boolean from '../boolean.js';
+    import * as crypto from '../crypto.js';
+    import * as http from '../http.js';
+    import * as number from '../number.js';
+    import * as object from '../object.js';
+    import * as string from '../string.js';
+
+    const resultsDiv = document.getElementById('results');
+    let totalTests = 0;
+    let passedTests = 0;
+
+    function renderModuleHeader(name) {
+      const h2 = document.createElement('h2');
+      h2.textContent = `Module: ${name}`;
+      resultsDiv.appendChild(h2);
+    }
+
+    async function runTest(name, testFn) {
+      totalTests++;
+      const div = document.createElement('div');
+      div.className = 'test';
+
+      const left = document.createElement('div');
+      left.innerHTML = `<span class="name">${name}</span>`;
+
+      const right = document.createElement('div');
+      right.className = 'result';
+
+      try {
+        await testFn();
+        div.classList.add('pass');
+        right.textContent = 'PASS';
+        passedTests++;
+      } catch (err) {
+        div.classList.add('fail');
+        right.textContent = 'FAIL';
+        left.innerHTML += `<div class="error">${err.message}</div>`;
+      }
+
+      div.appendChild(left);
+      div.appendChild(right);
+      resultsDiv.appendChild(div);
+    }
+
+    function assertEq(actual, expected) {
+      if (actual !== expected) throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+    }
+
+    async function runAllTests() {
+      // ARRAY
+      renderModuleHeader('array.js');
+      await runTest('first([1, 2, 3])', () => assertEq(array.first([1, 2, 3]), 1));
+      await runTest('first([], "x")', () => assertEq(array.first([], 'x'), 'x'));
+      await runTest('last([1, 2, 3])', () => assertEq(array.last([1, 2, 3]), 3));
+      await runTest('ensureArray(1)', () => assertEq(JSON.stringify(array.ensureArray(1)), '[]'));
+      await runTest('ensureArray([1])', () => assertEq(JSON.stringify(array.ensureArray([1])), '[1]'));
+      await runTest('hasItems([])', () => assertEq(array.hasItems([]), false));
+      await runTest('hasItems([1])', () => assertEq(array.hasItems([1]), true));
+
+      // BOOLEAN
+      renderModuleHeader('boolean.js');
+      await runTest('parse("yes")', () => assertEq(boolean.parse('yes'), true));
+      await runTest('parse("1")', () => assertEq(boolean.parse('1'), true));
+      await runTest('parse(0)', () => assertEq(boolean.parse(0), false));
+
+      // CRYPTO
+      renderModuleHeader('crypto.js');
+      await runTest('random(10)', () => {
+        const res = crypto.random(10);
+        if (res.length !== 10) throw new Error('Length should be 10');
+      });
+      await runTest('btoa() / atob()', () => {
+        const str = 'hello world';
+        assertEq(crypto.atob(crypto.btoa(str)), str);
+      });
+
+      // NUMBER
+      renderModuleHeader('number.js');
+      await runTest('round(10.1234, 2)', () => assertEq(number.round(10.1234, 2), 10.12));
+
+      // OBJECT
+      renderModuleHeader('object.js');
+      await runTest('isEmpty({})', () => assertEq(object.isEmpty({}), true));
+      await runTest('isEmpty({a: 1})', () => assertEq(object.isEmpty({ a: 1 }), false));
+      await runTest('replaceProperty()', () => {
+        const obj = { a: 1 };
+        object.replaceProperty(obj, 'a', 'b');
+        assertEq(JSON.stringify(obj), JSON.stringify({ b: 1 }));
+      });
+
+      // STRING
+      renderModuleHeader('string.js');
+      await runTest('hexToBase64() / base64ToHex()', () => {
+        const hex = '48656c6c6f20576f726c64';
+        const b64 = 'SGVsbG8gV29ybGQ=';
+        assertEq(string.hexToBase64(hex), b64);
+        assertEq(string.base64ToHex(b64), hex);
+      });
+      await runTest('sanitizeDigits("a1b2c3")', () => assertEq(string.sanitizeDigits('a1b2c3'), '123'));
+      await runTest('capitalize("hello world")', () => assertEq(string.capitalize('hello world'), 'Hello World'));
+      await runTest('capitalizeNameBR("sergio de rodrigues")', () => assertEq(string.capitalizeNameBR('sergio de rodrigues'), 'Sergio de Rodrigues'));
+      await runTest('parsePhoneBR("1199999999")', () => assertEq(string.parsePhoneBR('1199999999'), '11999999999'));
+
+      // HTTP
+      // Teste do HTTP usa uma requisição real de teste, pode falhar por CORS se chamado num endpoint ruim, mas pro ArrayBuffer testaremos localmente via fetch.
+      renderModuleHeader('http.js');
+      await runTest('normalizeURLProtocol("//google.com")', () => assertEq(http.normalizeURLProtocol('//google.com'), 'https://google.com'));
+
+      const summary = document.createElement('h2');
+      summary.style.background = passedTests === totalTests ? '#4CAF50' : '#F44336';
+      summary.style.color = 'white';
+      summary.style.borderLeft = 'none';
+      summary.textContent = `Completed: ${passedTests}/${totalTests} tests passed`;
+      resultsDiv.insertBefore(summary, resultsDiv.firstChild);
+    }
+
+    runAllTests();
+  </script>
+</body>
+
+</html>
