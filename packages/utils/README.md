@@ -36,7 +36,8 @@ import { capitalize } from '@devindex/utils/string';
 
 ### boolean
 
-- `parse(value)` — parse value to boolean (`'true'`, `'yes'`, `'1'`, `1` → `true`)
+- `toBoolean(value)` — convert value to boolean (`'true'`, `'yes'`, `'1'`, `1` → `true`)
+- `parse(value)` — deprecated alias of `toBoolean`, will be removed in the next major version
 
 ### crypto
 

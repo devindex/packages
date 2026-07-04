@@ -36,8 +36,9 @@ async function runAllTests() {
   await runTest('hasItems([])', () => assertEq(array.hasItems([]), false));
 
   console.log('\n--- BOOLEAN ---');
-  await runTest('parse("yes")', () => assertEq(boolean.parse('yes'), true));
-  await runTest('parse("1")', () => assertEq(boolean.parse('1'), true));
+  await runTest('toBoolean("yes")', () => assertEq(boolean.toBoolean('yes'), true));
+  await runTest('toBoolean("1")', () => assertEq(boolean.toBoolean('1'), true));
+  await runTest('parse (deprecated alias)', () => assertEq(boolean.parse('yes'), true));
 
   console.log('\n--- CRYPTO (Cross-Platform) ---');
   await runTest('random(10)', () => assertEq(baseCrypto.random(10).length, 10));

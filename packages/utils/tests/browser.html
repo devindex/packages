@@ -147,9 +147,10 @@
 
       // BOOLEAN
       renderModuleHeader('boolean.js');
-      await runTest('parse("yes")', () => assertEq(boolean.parse('yes'), true));
-      await runTest('parse("1")', () => assertEq(boolean.parse('1'), true));
-      await runTest('parse(0)', () => assertEq(boolean.parse(0), false));
+      await runTest('toBoolean("yes")', () => assertEq(boolean.toBoolean('yes'), true));
+      await runTest('toBoolean("1")', () => assertEq(boolean.toBoolean('1'), true));
+      await runTest('toBoolean(0)', () => assertEq(boolean.toBoolean(0), false));
+      await runTest('parse (deprecated alias)', () => assertEq(boolean.parse('yes'), true));
 
       // CRYPTO
       renderModuleHeader('crypto.js');

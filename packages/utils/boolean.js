@@ -1,10 +1,10 @@
 /**
- * Parse a value to boolean.
+ * Convert a value to boolean.
  * Strings `'true'`, `'yes'`, `'1'` and number `1` return `true`.
- * @param {*} value - The value to parse
+ * @param {*} value - The value to convert
  * @returns {boolean}
  */
-export function parse(value) {
+export function toBoolean(value) {
   switch (typeof value) {
     case 'boolean':
       return value;
@@ -16,3 +16,8 @@ export function parse(value) {
       return false;
   }
 }
+
+/**
+ * @deprecated Use `toBoolean` instead. Will be removed in the next major version.
+ */
+export const parse = toBoolean;
