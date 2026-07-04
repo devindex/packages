@@ -1,55 +1,17 @@
 {
-  "name": "@devindex/utils",
-  "version": "1.0.0",
-  "description": "A collection of JavaScript utility functions",
-  "main": "./index.js",
+  "name": "devindex-packages",
+  "private": true,
   "type": "module",
-  "exports": {
-    ".": "./index.js",
-    "./array": "./array.js",
-    "./boolean": "./boolean.js",
-    "./crypto": "./crypto.js",
-    "./crypto/node": "./crypto.node.js",
-    "./env": "./env.js",
-    "./number": "./number.js",
-    "./object": "./object.js",
-    "./stream": "./stream.js",
-    "./string": "./string.js",
-    "./http": "./http.js",
-    "./terminal": "./terminal.js"
-  },
-  "files": [
-    "index.js",
-    "array.js",
-    "boolean.js",
-    "crypto.js",
-    "crypto.node.js",
-    "env.js",
-    "number.js",
-    "object.js",
-    "stream.js",
-    "string.js",
-    "http.js",
-    "terminal.js"
+  "workspaces": [
+    "packages/*"
   ],
   "scripts": {
-    "test": "node tests/cli.js",
-    "test:browser": "npx http-server . -o tests/browser.html"
+    "test": "npm run test --workspaces"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devindex/utils.git"
+    "url": "git+https://github.com/devindex/packages.git"
   },
-  "keywords": [
-    "utils",
-    "utilities"
-  ],
   "author": "Sergio Rodrigues <exprodrigues@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/devindex/utils/issues"
-  },
-  "homepage": "https://github.com/devindex/utils#readme",
-  "license": "MIT",
-  "peerDependencies": {},
-  "peerDependenciesMeta": {}
+  "license": "MIT"
 }
