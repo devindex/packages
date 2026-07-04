@@ -2,7 +2,7 @@
  * Base request wrapper that handles URL normalization, error checking, and automatic response parsing.
  * @param {string} url - The URL to fetch
  * @param {Object} [options={}] - Fetch options
- * @param {'json'|'text'|'blob'|'arrayBuffer'} [options.type='json'] - Response type
+ * @param {'json'|'text'|'blob'|'arrayBuffer'} [options.responseType='json'] - Response type
  * @returns {Promise<*>}
  */
 export async function request(url, options = {}) {
@@ -32,7 +32,7 @@ export async function request(url, options = {}) {
  * Perform a GET request.
  * @param {string} url - The URL to fetch
  * @param {RequestInit} [options={}] - Fetch options
- * @returns {Promise<Response>}
+ * @returns {Promise<*>}
  */
 export function get(url, options = {}) {
   return request(url, { ...options, method: 'GET' });
@@ -43,7 +43,7 @@ export function get(url, options = {}) {
  * @param {string} url - The URL to fetch
  * @param {*} body - The request body (will be JSON.stringify if object)
  * @param {RequestInit} [options={}] - Fetch options
- * @returns {Promise<Response>}
+ * @returns {Promise<*>}
  */
 export function post(url, body, options = {}) {
   return request(url, {
@@ -62,7 +62,7 @@ export function post(url, body, options = {}) {
  * @param {string} url - The URL to fetch
  * @param {*} body - The request body (will be JSON.stringify if object)
  * @param {RequestInit} [options={}] - Fetch options
- * @returns {Promise<Response>}
+ * @returns {Promise<*>}
  */
 export function put(url, body, options = {}) {
   return request(url, {
@@ -80,18 +80,22 @@ export function put(url, body, options = {}) {
  * Perform a DELETE request.
  * @param {string} url - The URL to fetch
  * @param {RequestInit} [options={}] - Fetch options
- * @returns {Promise<Response>}
+ * @returns {Promise<*>}
  */
 export function del(url, options = {}) {
   return request(url, { ...options, method: 'DELETE' });
 }
+
+// `delete` is a reserved word and cannot name a function declaration,
+// but it is valid as an export name: enables `http.delete(...)`.
+export { del as delete };
 
 /**
  * Perform a PATCH request with JSON body.
  * @param {string} url - The URL to fetch
  * @param {*} body - The request body (will be JSON.stringify if object)
  * @param {RequestInit} [options={}] - Fetch options
- * @returns {Promise<Response>}
+ * @returns {Promise<*>}
  */
 export function patch(url, body, options = {}) {
   return request(url, {

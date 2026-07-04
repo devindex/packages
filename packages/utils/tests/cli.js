@@ -50,6 +50,9 @@ async function runAllTests() {
   console.log('\n--- ENV ---');
   await runTest('getValue(fallback)', () => assertEq(env.getValue('DOES_NOT_EXIST', 'fallback'), 'fallback'));
 
+  console.log('\n--- HTTP ---');
+  await runTest('delete alias of del', () => assertEq(http.delete, http.del));
+
   console.log('\n--- NUMBER ---');
   await runTest('round(10.1234, 2)', () => assertEq(number.round(10.1234, 2), 10.12));
 

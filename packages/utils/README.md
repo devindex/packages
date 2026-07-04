@@ -52,6 +52,12 @@ import { capitalize } from '@devindex/utils/string';
 
 ### http
 
+- `request(url, options?)` — fetch wrapper with error checking and parsed response (`options.responseType`: `'json'` | `'text'` | `'blob'` | `'arrayBuffer'`, default `'json'`)
+- `get(url, options?)` — GET request
+- `post(url, body, options?)` — POST request with JSON body
+- `put(url, body, options?)` — PUT request with JSON body
+- `patch(url, body, options?)` — PATCH request with JSON body
+- `del(url, options?)` — DELETE request (also exported as `delete` for namespaced usage: `http.delete(...)`)
 - `normalizeURLProtocol(url)` — prepend `https:` to protocol-relative URLs
 - `getAsArrayBuffer(url, options?)` — fetch URL as ArrayBuffer
 - `getPDFAsArrayBuffer(url)` — fetch PDF as ArrayBuffer
