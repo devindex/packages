@@ -6,12 +6,18 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "npm run test --workspaces"
+    "test": "npm run test --workspaces",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "npm test && changeset publish"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devindex/packages.git"
   },
   "author": "Sergio Rodrigues <exprodrigues@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0"
+  }
 }
