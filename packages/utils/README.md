@@ -89,6 +89,8 @@ import { capitalize } from '@devindex/utils/string';
 - `capitalizeWord(word)` — capitalize single word
 - `capitalizeNameBR(value)` — capitalize Brazilian names
 - `capitalizeFirst(value)` — capitalize first letter only
+- `slugify(value)` — convert to a URL-friendly slug
+- `truncate(value, max)` — truncate to `max` chars, ellipsis included
 - `parsePhoneBR(phone, defaultDDD?)` — normalize Brazilian phone
 
 ### terminal

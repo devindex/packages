@@ -1,5 +1,11 @@
 # @devindex/utils
 
+## 1.2.0
+
+### Minor Changes
+
+- Add slugify and truncate to the string module
+
 ## 1.1.0
 
 ### Minor Changes

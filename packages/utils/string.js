@@ -165,6 +165,40 @@ export function capitalizeFirst(value) {
 }
 
 /**
+ * Convert a string into a URL-friendly slug.
+ * @param {string} value - The input string
+ * @returns {string} The slug, or an empty string for non-string input
+ */
+export function slugify(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+
+  return removeAccents(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+/**
+ * Truncate a string, appending an ellipsis when it exceeds the limit.
+ * @param {string} value - The input string
+ * @param {number} max - Maximum length of the output, ellipsis included
+ * @returns {string} The truncated string, or an empty string for non-string input
+ */
+export function truncate(value, max) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+
+  if (!Number.isFinite(max) || max < 1 || value.length <= max) {
+    return value;
+  }
+
+  return `${value.slice(0, max - 1).replace(/[\uD800-\uDBFF]$/, '')}…`;
+}
+
+/**
  * Parse and normalize a Brazilian phone number, adding area code and 9th digit when needed.
  * @param {string|number} phone - The phone number
  * @param {string} [defaultDDD='00'] - Default area code (DDD)
