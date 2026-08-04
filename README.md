@@ -7,6 +7,7 @@ Monorepo for the `@devindex` packages, managed with [npm workspaces](https://doc
 | Package | Description |
 | --- | --- |
 | [`@devindex/utils`](packages/utils) | A collection of pure ESM JavaScript utility functions |
+| [`@devindex/mongoose-kit`](packages/mongoose-kit) | Mongoose model builder and helpers |
 
 ## Development
 

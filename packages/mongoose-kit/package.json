@@ -1,0 +1,48 @@
+{
+  "name": "@devindex/mongoose-kit",
+  "version": "1.0.0",
+  "description": "Mongoose model builder and helpers",
+  "main": "./index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./model": "./ModelBuilder.js",
+    "./serialize": "./serialize.js",
+    "./helpers": "./helpers.js"
+  },
+  "files": [
+    "index.js",
+    "ModelBuilder.js",
+    "serialize.js",
+    "helpers.js"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devindex/packages.git",
+    "directory": "packages/mongoose-kit"
+  },
+  "keywords": [
+    "mongoose",
+    "mongodb",
+    "model",
+    "schema"
+  ],
+  "author": "Sergio Rodrigues <exprodrigues@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/devindex/packages/issues"
+  },
+  "homepage": "https://github.com/devindex/packages/tree/main/packages/mongoose-kit#readme",
+  "license": "MIT",
+  "peerDependencies": {
+    "mongoose": ">=8"
+  },
+  "devDependencies": {
+    "mongoose": "^9"
+  }
+}
