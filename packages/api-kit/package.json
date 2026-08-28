@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./context": "./context/index.js",
+    "./env": "./env/index.js",
     "./errors": "./errors/index.js",
     "./events": "./events/index.js",
     "./http": "./http/index.js",
@@ -16,6 +17,7 @@
   },
   "files": [
     "context",
+    "env",
     "errors",
     "events",
     "http",

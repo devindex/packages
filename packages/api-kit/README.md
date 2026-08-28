@@ -425,6 +425,41 @@ Every Redis replica upserts the same scheduler and starts an equivalent Worker. 
 leader; BullMQ coordinates which Worker receives each occurrence. A new occurrence is produced when
 the previous one starts, so global concurrency serializes slow runs rather than overlapping them.
 
+## `./env`
+
+`createEnvReader()` reads `process.env` and **collects** what is wrong instead of failing on the
+first problem, so a misconfigured deploy reports every missing or malformed variable in one boot
+rather than one per restart. It does not decide how to fail: `issues()` hands the list back and the
+service merges it with its own cross-field rules.
+
+```js
+import { createEnvReader } from '@devindex/api-kit/env';
+
+const env = createEnvReader();
+
+export const config = Object.freeze({
+  port: env.int('PORT', { fallback: 3000 }),
+  mongoUri: env.str('MONGO_URI', { required: true }),
+  driver: env.oneOf('MESSAGING_DRIVER', ['memory', 'bullmq'], { fallback: 'memory' }),
+});
+
+export function assertConfig() {
+  const issues = env.issues();
+  if (issues.length === 0) return;
+
+  for (const issue of issues) console.error(`config: ${issue}`);
+  process.exit(1);
+}
+```
+
+`str`, `int` and `oneOf` take `fallback` (default `null`) and `required` (default `false`), and read
+an empty string as an absent value — a variable left blank in a `.env` is not a value. A rejected
+variable still returns its fallback, so the config object finishes building and `issues()` reports
+everything in one pass.
+
+A reader owns its own list, so config split across several modules is just the reader passed to each
+one, and a test builds its own with `createEnvReader({ PORT: '3000' })` without touching the process.
+
 ## `./runtime`
 
 `onShutdown` wires `SIGINT`/`SIGTERM` to a teardown callback and exits — the one
