@@ -83,3 +83,10 @@ the return.
  * @return {boolean} True for a DomainError from any copy of this package.
  */
 ```
+
+## Commits
+
+Conventional Commits, scoped by the package or module the change touches:
+`feat(api-kit): add environment variable reader`. A release commit carries only
+what `changeset version` wrote and names the tag it produces:
+`chore(release): api-kit@0.2.0`.

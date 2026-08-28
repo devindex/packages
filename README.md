@@ -31,7 +31,9 @@ Every change that should be published needs a changeset describing it:
 npx changeset
 ```
 
-The CLI asks which packages are affected, the bump type (`patch`, `minor` or `major`) and a summary. The summary becomes the package's CHANGELOG entry, so write it for consumers of the package. Commit the generated `.changeset/*.md` file together with the change.
+The CLI asks which packages are affected, the bump type (`patch`, `minor` or `major`) and a summary.
+The summary becomes the package's CHANGELOG entry, so write it for consumers of the package.
+Commit the generated `.changeset/*.md` file together with the change.
 
 Guidelines for the bump type:
 
@@ -43,9 +45,13 @@ Guidelines for the bump type:
 
 ```bash
 npm run version                              # apply pending changesets: bump versions + update CHANGELOGs
-git add -A && git commit -m "chore: version packages"
+git add -u && git commit -m "chore(release): <pkg>@<version>"
 npm run release                              # run tests, then publish changed packages to npm
 git push --follow-tags
 ```
 
-`npm run release` publishes with public access and creates one git tag per package (e.g. `@devindex/utils@1.1.0`). Publishing requires being logged in to npm (`npm whoami` to check).
+The release commit names the package without its scope, and carries only what `npm run version`
+wrote — `chore(release): api-kit@0.2.0`.
+
+`npm run release` publishes with public access and creates one git tag per package(e.g. `@devindex/utils@1.1.0`).
+Publishing requires being logged in to npm (`npm whoami` to check).
