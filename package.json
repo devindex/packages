@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "npm run test --workspaces",
+    "test": "npm run test --workspaces --if-present",
     "changeset": "changeset",
     "version": "changeset version",
     "release": "npm test && changeset publish"
