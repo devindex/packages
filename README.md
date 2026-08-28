@@ -8,6 +8,7 @@ Monorepo for the `@devindex` packages, managed with [npm workspaces](https://doc
 | --- | --- |
 | [`@devindex/utils`](packages/utils) | A collection of pure ESM JavaScript utility functions |
 | [`@devindex/mongoose-kit`](packages/mongoose-kit) | Mongoose model builder and helpers |
+| [`@devindex/api-kit`](packages/api-kit) | Building blocks for Fastify services: typed domain errors, HTTP plugins, logging and background runtime |
 
 ## Development
 
