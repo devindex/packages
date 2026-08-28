@@ -484,6 +484,21 @@ A second signal arriving mid-drain is a no-op. A `close` that throws exits `1` a
 logging; one that hangs past `timeoutMs` (default `10_000`) force-exits `1` so a stuck
 drain cannot wedge the process. `signals` defaults to `['SIGINT', 'SIGTERM']`.
 
+`onFatalError` covers the other exit: an uncaught exception or an unhandled rejection is
+logged as fatal and the process exits `1`.
+
+```js
+import { onFatalError } from '@devindex/api-kit/runtime';
+
+onFatalError({ logger });
+```
+
+It deliberately does not run the shutdown callback. After an uncaught throw the process
+state is undefined, and a teardown running over it can hang or corrupt what it touches —
+exiting fast leaves the restart to the supervisor. The logger is flushed first, so a
+`pretty` transport writing from a worker thread does not lose the line that explains the
+crash.
+
 ## Tests
 
 The default suite exercises every memory path and skips integration tests when Redis is absent:

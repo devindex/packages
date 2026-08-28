@@ -35,3 +35,25 @@ export function onShutdown(close, { signals = ['SIGINT', 'SIGTERM'], timeoutMs =
     process.once(signal, () => handle(signal));
   }
 }
+
+/**
+ * Logs an uncaught exception or unhandled rejection as fatal, then exits 1.
+ *
+ * @param {object} [options]
+ * @param {{ fatal: Function, flush?: Function }} [options.logger] - Logs the error before exiting.
+ */
+export function onFatalError({ logger } = {}) {
+  // No teardown here, unlike `onShutdown`: after an uncaught throw the process
+  // state is undefined, and a `close` running over it can hang or corrupt what
+  // it touches. Exiting fast leaves the restart to the supervisor.
+  const handle = (event) => (error) => {
+    logger?.fatal({ err: error }, event);
+    // A pino transport writes from a worker thread, so exiting on the next line
+    // would drop the very line explaining why the process died.
+    logger?.flush?.();
+    process.exit(1);
+  };
+
+  process.on('uncaughtException', handle('uncaught exception'));
+  process.on('unhandledRejection', handle('unhandled rejection'));
+}
