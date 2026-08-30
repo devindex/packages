@@ -1,5 +1,11 @@
 # @devindex/api-kit
 
+## 0.3.1
+
+### Patch Changes
+
+- Document `./cache` in the README: the `createCache()` example, the key, value and TTL rules, why only `delete()` rejects when the store is unreachable, and what each driver guarantees.
+
 ## 0.3.0
 
 ### Minor Changes
