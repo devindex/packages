@@ -4,6 +4,7 @@
   "description": "Building blocks for Fastify services: typed domain errors, HTTP plugins, logging and background runtime",
   "type": "module",
   "exports": {
+    "./cache": "./cache/index.js",
     "./context": "./context/index.js",
     "./env": "./env/index.js",
     "./errors": "./errors/index.js",
@@ -16,6 +17,7 @@
     "./package.json": "./package.json"
   },
   "files": [
+    "cache",
     "context",
     "env",
     "errors",
@@ -50,7 +52,9 @@
     "schedule",
     "events",
     "event-bus",
-    "pubsub"
+    "pubsub",
+    "cache",
+    "redis"
   ],
   "peerDependencies": {
     "@fastify/cors": "^11.0.0",
