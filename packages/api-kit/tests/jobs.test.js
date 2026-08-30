@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { queueName, redisConnection } from '../internal/bullmq.js';
+import { queueName } from '../internal/bullmq.js';
+import { redisConnection } from '../internal/redis.js';
 import { createJobQueue } from '../jobs/index.js';
 import { backoffDelay, dedupId, DEFAULTS, resolveDefinition } from '../internal/retry.js';
 

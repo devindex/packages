@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { createSchedule } from '../schedule/index.js';
-import { queueName, redisConnection } from '../internal/bullmq.js';
+import { queueName } from '../internal/bullmq.js';
+import { redisConnection } from '../internal/redis.js';
 
 if (process.env.REQUIRE_REDIS === '1' && !process.env.REDIS_URL) {
   throw new Error('REQUIRE_REDIS=1 needs REDIS_URL');

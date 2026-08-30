@@ -1,8 +1,5 @@
-import {
-  loadBullmq,
-  queueName,
-  redisConnection,
-} from '../../internal/bullmq.js';
+import { loadBullmq, queueName } from '../../internal/bullmq.js';
+import { redisConnection } from '../../internal/redis.js';
 import { noopLogger } from '../../internal/logger.js';
 
 const SCHEDULER_ID = 'schedule';
