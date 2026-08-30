@@ -1,5 +1,21 @@
 # @devindex/api-kit
 
+## 0.3.0
+
+### Minor Changes
+
+- Add `./cache` — `createCache()` over a `memory` or `redis` driver, with the same contract on both: `get()`, `has()`, `set()`, `delete()` and `wrap()`.
+
+  Values are JSON, and both drivers store the serialized form, so what the memory driver hands back cannot be mutated behind the cache's back. `undefined` is reserved to report a miss and is never stored; `null` is a valid value. Every key lives under the configured `prefix`, and `ttl` (milliseconds, `0` never expires) is set per cache and overridable per write.
+
+  Reads and writes are optimizations, so a broken store degrades: `get()` and `has()` report a miss, `set()` logs and moves on. `delete()` is the exception and propagates — an invalidation that did not happen serves stale data until the TTL runs out, and the caller is the one who can decide what that means.
+
+- Add offset pagination to `./http` — `paginate()` and the `pageResponse()` schema, the pair that closes the contract `pageQuery()` opens.
+
+  The query fetches `limit + 1` rows and `paginate(rows, limit)` slices the extra one off, returning `{ items, hasMore }`. The kit never runs the query, so it works over Mongoose, a SQL builder or an upstream API alike. A resource that needs the count passes it as `paginate(rows, limit, total)` and gets `{ items, hasMore, total }`; `hasMore` still comes from the extra row, never from the count, because the two queries can disagree.
+
+  `pageResponse(itemSchema)` declares that shape as a response schema — `{ total: true }` adds `total` — which Fastify needs in order not to strip the fields from a correct payload.
+
 ## 0.2.0
 
 ### Minor Changes

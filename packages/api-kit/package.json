@@ -1,6 +1,6 @@
 {
   "name": "@devindex/api-kit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Building blocks for Fastify services: typed domain errors, HTTP plugins, logging and background runtime",
   "type": "module",
   "exports": {
