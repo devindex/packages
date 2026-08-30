@@ -9,6 +9,14 @@ export function pageQuery({ maxLimit = 100, defaultLimit = 20 } = {}) {
   });
 }
 
+export function pageResponse(items, { total = false } = {}) {
+  return objectSchema({
+    items: { type: 'array', items },
+    hasMore: { type: 'boolean' },
+    ...(total && { total: { type: 'integer', minimum: 0 } }),
+  }, total ? ['items', 'hasMore', 'total'] : ['items', 'hasMore']);
+}
+
 export const stringSchema = (options = {}) => ({ type: 'string', minLength: 1, ...options });
 export const email = Object.freeze({ type: 'string', format: 'email' });
 export const dateTime = Object.freeze({ type: 'string', format: 'date-time' });

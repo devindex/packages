@@ -103,7 +103,8 @@ The status is the error's own `status` when it has one, otherwise `STATUS_BY_COD
 
 Inbound `x-request-id` is reused only when it is a valid UUID, otherwise a fresh v4 is generated; the
 id is always echoed back. `schema.js` ships ODM-agnostic JSON-Schema helpers — `objectSchema`,
-`stringSchema`, `pageQuery`, `email`, `dateTime`, `dateKey`, `clock`.
+`stringSchema`, `pageQuery`, `pageResponse`, `email`, `dateTime`, `dateKey`, `clock` (see
+[Pagination](#pagination)).
 
 ### CORS and security headers
 
@@ -144,6 +145,54 @@ await createApp({ helmet: { contentSecurityPolicy: { useDefaults: true } }, rout
 
 Anything else — rate limits, compression — still goes through `plugins`, which registers after these
 and before the routes.
+
+### Pagination
+
+Offset pagination in two shapes, `{ items, hasMore }` and `{ items, hasMore, total }`, over one rule:
+**the query fetches `limit + 1` rows** and `paginate` slices the extra one off. The kit never runs the
+query — `skip`/`limit` belong to Mongoose, `offset`/`limit` to a SQL builder, a cursor to an upstream
+API — so it only does the arithmetic and the shape, and works with all of them.
+
+```js
+import { paginate } from '@devindex/api-kit/http';
+
+const rows = await Order.find(filter).skip(offset).limit(limit + 1);
+return paginate(rows, limit);        // { items, hasMore }
+```
+
+A resource that really needs the count passes it as the third argument, and gets `total` in the
+response:
+
+```js
+const [rows, total] = await Promise.all([
+  Order.find(filter).skip(offset).limit(limit + 1),
+  Order.countDocuments(filter),
+]);
+return paginate(rows, limit, total); // { items, hasMore, total }
+```
+
+`hasMore` always comes from the extra row, never from `total`. Deriving it from the count would make
+it depend on two queries that can disagree — a document inserted between them, and the flag promises
+a page that is not there.
+
+`pageQuery` and `pageResponse` are the two ends of the contract. The response schema is not optional
+decoration: Fastify strips whatever it does not declare, so a missing `hasMore` there silently
+disappears from a correct payload.
+
+```js
+import { pageQuery, pageResponse } from '@devindex/api-kit/http';
+
+instance.get('/orders', {
+  schema: {
+    querystring: pageQuery({ maxLimit: 50 }),
+    response: { 200: pageResponse(orderSchema) },
+  },
+}, async (req) => orders.list(req.query));
+```
+
+`pageQuery` applies the defaults (`limit` 20, `offset` 0), so the handler always reads two integers.
+`pageResponse(items, { total: true })` adds `total` to the schema — pass it wherever `paginate` gets
+a count.
 
 ## `./context`
 
