@@ -9,8 +9,8 @@ driver from the environment.
 npm install @devindex/api-kit
 ```
 
-Node `>=22`. The memory drivers need no external service. BullMQ drivers load their optional peers
-only on first use:
+Node `>=22`. The memory drivers need no external service. The Redis-backed drivers load their
+optional peers only on first use:
 
 ```bash
 npm install bullmq ioredis
@@ -473,6 +473,68 @@ cannot know whether another still serves them.
 Every Redis replica upserts the same scheduler and starts an equivalent Worker. There is no elected
 leader; BullMQ coordinates which Worker receives each occurrence. A new occurrence is produced when
 the previous one starts, so global concurrency serializes slow runs rather than overlapping them.
+
+## `./cache`
+
+Key/value cache with one contract over two stores:
+
+```js
+import { createCache } from '@devindex/api-kit/cache';
+
+const cache = createCache({
+  driver: 'redis',
+  redisUrl,
+  prefix: 'billing',
+  ttl: 300_000,
+  logger,
+});
+
+await cache.start();
+
+const plan = await cache.wrap(`plan:${planId}`, () => plans.findById(planId));
+
+await cache.set(`quote:${userId}`, quote, { ttl: 60_000 });
+const quote = await cache.get(`quote:${userId}`);
+const known = await cache.has(`quote:${userId}`);
+
+await plans.update(planId, changes);
+await cache.delete(`plan:${planId}`);
+
+await cache.stop();
+```
+
+Every key is namespaced by `prefix`, so `plan:42` is stored as `billing:plan:42`. `ttl` is in
+milliseconds and `0` never expires; the cache default is overridable on each write.
+
+Values must be JSON-serializable. `undefined` reports a miss and is never stored — writing it
+throws — while `null` is a value like any other, so `get()` returns `null` and `has()` returns
+`true` for it. Both drivers keep the serialized form, so the object the memory driver returns can
+be mutated without corrupting what is cached.
+
+`wrap()` returns the cached value or runs the loader once, stores the result and returns it; a
+loader that resolves `undefined` is not cached. Concurrent misses on the same key run one loader
+each — the cache does not collapse them.
+
+### Failures
+
+A cache read or write is an optimization and never fails a request: with the store unreachable,
+`get()` and `has()` report a miss and `set()` logs a warning, so the caller falls back to its
+source. `delete()` is the exception and rejects. An invalidation that did not happen keeps serving
+stale data until the TTL expires, which only the caller can weigh — `.catch(() => {})` says so
+explicitly.
+
+### Driver guarantees
+
+| | `memory` | `redis` |
+|---|---|---|
+| External service | None | Redis |
+| Scope | One private cache per replica | One cache shared by every replica |
+| Survives restart | No | Yes |
+| Expiration | On read | Owned by Redis |
+| Size bound | None | Redis eviction policy |
+
+The memory driver frees an entry only when it is read after expiring, so a key written and never
+read again occupies memory until `stop()`. Keep it for development, tests and small derived values.
 
 ## `./env`
 
