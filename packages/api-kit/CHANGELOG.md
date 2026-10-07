@@ -1,5 +1,11 @@
 # @devindex/api-kit
 
+## 0.4.0
+
+### Minor Changes
+
+- Add `TimeoutError` (`GATEWAY_TIMEOUT`), mapped to HTTP 504 by the error handler.
+
 ## 0.3.1
 
 ### Patch Changes
