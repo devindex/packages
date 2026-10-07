@@ -12,6 +12,7 @@ import {
   MethodNotAllowedError,
   NotFoundError,
   PayloadError,
+  TimeoutError,
   TooManyRequestsError,
   UnavailableError,
   ValidationError,
@@ -30,6 +31,7 @@ const SUBTYPES = [
   [PayloadError, ERROR_CODE.PAYLOAD_TOO_LARGE, 'Payload too large'],
   [TooManyRequestsError, ERROR_CODE.TOO_MANY_REQUESTS, 'Too many requests'],
   [UnavailableError, ERROR_CODE.UNAVAILABLE, 'Service unavailable'],
+  [TimeoutError, ERROR_CODE.GATEWAY_TIMEOUT, 'Gateway timeout'],
 ];
 
 test('every subtype carries its own code, name and default message', () => {

@@ -108,6 +108,13 @@ export class UnavailableError extends DomainError {
   }
 }
 
+/** An upstream call ran out of time; the dependency may be healthy but slow. */
+export class TimeoutError extends DomainError {
+  constructor(message = 'Gateway timeout', options = {}) {
+    super(message, { ...options, code: ERROR_CODE.GATEWAY_TIMEOUT });
+  }
+}
+
 /**
  * Whether the domain threw this on purpose. Use it over `instanceof`.
  *

@@ -54,6 +54,7 @@ pin their code but not their status, so `new NotFoundError('order archived', { s
 | `PayloadError` | `PAYLOAD_TOO_LARGE` |
 | `TooManyRequestsError` | `TOO_MANY_REQUESTS` |
 | `UnavailableError` | `UNAVAILABLE` |
+| `TimeoutError` | `GATEWAY_TIMEOUT` |
 | `DomainError` | `DOMAIN_ERROR` |
 
 Use `isDomainError(error)` instead of `instanceof`. The brand crosses multiple installed copies of
