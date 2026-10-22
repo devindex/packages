@@ -1,5 +1,11 @@
 # @devindex/utils
 
+## 1.2.1
+
+### Patch Changes
+
+- Fix `capitalizeFirst`, which uppercased the second letter too (`'hello world'` became `'HEllo world'`). It now capitalizes only the first letter, accented letters included, and no longer the one after `(`. `capitalizeNameBR` keeps `com` lowercase.
+
 ## 1.2.0
 
 ### Minor Changes
