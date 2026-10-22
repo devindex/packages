@@ -158,10 +158,7 @@ export function capitalizeFirst(value) {
   return value
     .replace(/\s{2,}/g, ' ')
     .toLowerCase()
-    .split('(')
-    .map((part) => capitalizeWord(part.toLowerCase()))
-    .join('(')
-    .replace(/[a-z]/, (char) => char.toUpperCase());
+    .replace(/^\P{L}*\p{L}/u, (match) => match.toUpperCase());
 }
 
 /**
