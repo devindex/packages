@@ -73,6 +73,7 @@ async function runAllTests() {
   });
   await runTest('sanitizeDigits("a1b2c3")', () => assertEq(string.sanitizeDigits('a1b2c3'), '123'));
   await runTest('capitalize("hello world")', () => assertEq(string.capitalize('hello world'), 'Hello World'));
+  await runTest('capitalizeFirst("ÁGUA viva")', () => assertEq(string.capitalizeFirst('ÁGUA viva'), 'Água viva'));
   await runTest('slugify("Olá Mundo!")', () => assertEq(string.slugify('Olá Mundo!'), 'ola-mundo'));
   await runTest('slugify(non-string)', () => assertEq(string.slugify(null), ''));
   await runTest('truncate("hello world", 8)', () => assertEq(string.truncate('hello world', 8), 'hello w…'));
