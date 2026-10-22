@@ -141,7 +141,7 @@ export function capitalize(value, skipTerms = []) {
  */
 export function capitalizeNameBR(value) {
   return capitalize(value, [
-    'da', 'de', 'do', 'das', 'dos', 'e', 'em', 'ou', 'no', 'na', 'c/', 's/',
+    'da', 'de', 'do', 'das', 'dos', 'e', 'em', 'ou', 'no', 'na', 'com', 'c/', 's/',
   ]);
 }
 
